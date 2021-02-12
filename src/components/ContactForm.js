@@ -8,7 +8,6 @@ const ContactForm = () => {
   });
   const onSubmit = (data) => {
     setData(data);
-    console.log(data)
   };
 
   return (
@@ -16,10 +15,11 @@ const ContactForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="firstName">First Name*</label>
-          <input
+          <input 
+            id="firstName"
             name="firstName"
             placeholder="Edd"
-            ref={register({ required: true, maxLength: 3 })}
+            ref={register({ required: true })}
           />
           {errors.firstName && (
             <p>Looks like there was an error: {errors.firstName.type}</p>
@@ -44,7 +44,7 @@ const ContactForm = () => {
             Email*
           </label>
           <input name="email" 
-            id="lastName"
+            id="email"
             placeholder="bluebill1049@hotmail.com"
             ref={register({ required: true })} 
           />
@@ -60,10 +60,9 @@ const ContactForm = () => {
             ref={register({ required: false })} 
           />
         </div>
+
         {data && (
-          <pre 
-          aria-label="data-display"
-          style={{ textAlign: "left", color: "white" }}>
+          <pre style={{ textAlign: "left", color: "white" }}>
             {JSON.stringify(data, null, 2)}
           </pre>
         )}

@@ -15,52 +15,51 @@ test('test input functionality', async () => {
 });
 
 test('form input validation and submission', async () => {
-    act(() => {
-        render(<ContactForm />);
-    })
+    
+    render(<ContactForm />);
 
     // Grab our inputs
-    const firstNameInput = screen.getByLabelText(/last name/i);
+    // Added an id to firstName + changed the id for email from lastName to email.
+
+    const firstNameInput = screen.getByLabelText(/first name/i);
     const lastNameInput = screen.getByLabelText(/last name/i);
     const emailInput = screen.getByPlaceholderText(/bluebill1049@hotmail.com/i);
     const messageInput = screen.getByRole('textbox', {name: /message/i});
 
-    // Test our inputs
+    // Enter text into our inputs
 
-    userEvent.type(firstNameInput, 'Pau');
+    userEvent.type(firstNameInput, 'Paul');
     userEvent.type(lastNameInput, 'St.Germain');
     userEvent.type(emailInput, 'test@email.com');
     userEvent.type(messageInput, 'Something');
 
-// await act(async () => {
-//     userEvent.click(screen.getByTestId(/submit/i));
-// })
+
+    // Select & Click our button
+
+    // NOTES: An input was used in place of a button - these have no role.
+    // Instead, I added a targetable testid for a higher priority selection of our submit input
 
     const button = screen.getByTestId(/submit/i);
 
     userEvent.click(button);
 
+    // Check that the form submission had the intended result of displaying our data on the screen
+
     const firstNameResult = screen.findByText(/paul/i);
 
-    console.log(await firstNameResult);
-
+    expect(await firstNameResult).toBeInTheDocument();
     
-
-    // expect(await firstNameResult).toBeInTheDocument();
-
-    // const result = screen.findByLabelText(/data-display/i);
-
-    // console.log(await result);
-    
-    // expect(result).toBeTruthy();
-
-//  const result = screen.findByText('"firstName": "Paul", "lastName": "St.Germain, "email": "test@email.com", "message": "Something"')
-
-// expect.objectContaining({
-// "firstName": "Paul",
-// "lastName": "St.Germain",
-// "email": "test@email.com",
-// "message": "Something"
-// })
-    
+    // FINAL NOTES & OBSERVATIONS
+    /** Upon attempting to set up the tests I ran into some issues which pointed me in the direction of issues with the HTML doc's setup:
+     * 
+     *  1. The firstName input had no ID.
+     *  2. The email input had an ID of lastName
+     *  3. The submit button is actually an input which, having no role, cannot be selected the most appropriate way.
+     * 
+     * Once these issues were fixed, and a test was run with reasonable potential user input, I found a couple issues with this form's functionality itself:
+     * 
+     *  1. The firstName field had an unreasonable maxLength of 3 characters.
+     *  2. The email field has no validation established to ensure that a proper email address is being input.
+     * NOTE: Come back and attempt to fix this one. ^
+     */
 })
